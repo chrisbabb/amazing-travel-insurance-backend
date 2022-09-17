@@ -8,24 +8,22 @@ class RaterController < ApplicationController
 
         case params[:product_name]
         when "tripcan"
-            final_price = (params[:trip_cost] * 0.1 + 30).round
+            final_price = ((params[:trip_cost] * (params[:coverage_level] * 0.1)) + 30).round
         when "annualmedevac"
-            if params[:age].any?{|x| x >= 75 }
-                case params[:age].length
+            if params[:ages].any?{|x| x >= 75 }
+                case params[:ages].length
                 when 1
                     final_price = 350
                 when 2
                     final_price = 500
-                when 3 .. 5
-                    final_price = 750
                 end
             else
-                case params[:age].length
+                case params[:ages].length
                 when 1
                     final_price = 250
                 when 2
                     final_price = 400
-                when 3 .. 5
+                when 3 .. 7
                     final_price = 650
                 end
             end
@@ -33,16 +31,30 @@ class RaterController < ApplicationController
             over_seven_four = params[:ages].count { |n| n >= 75 }
             final_price = date_difference * over_seven_four * 5
             final_price += date_difference * (params[:ages].length - over_seven_four) * 3
-            final_price += 10
         end
+
+        if params[:product_name] === 'dailymedevac'
+            plan_fee = 10
+            total_price = final_price + plan_fee
+            return_data = {'product' => params[:product_name], 'travelers' => params[:ages].length, 'price' => final_price, 'plan_fee' => plan_fee, 'total_price' => total_price, 'days' => date_difference, 'start_date' => start_date, 'end_date' => end_date }.to_json
+        elsif params[:product_name] === 'annualmedevac'
+            plan_fee = 30
+            total_price = final_price + plan_fee
+            return_data = {'product' => params[:product_name], 'travelers' => params[:ages].length, 'price' => final_price, 'plan_fee' => plan_fee, 'total_price' => total_price, 'start_date' => start_date, 'end_date' => end_date }.to_json
+        else
+            plan_fee = 10
+            total_price = final_price + plan_fee
+            return_data = {'product' => params[:product_name], 'coverage_level' => params[:coverage_level],'price' => final_price, 'plan_fee' => plan_fee, 'total_price' => total_price, 'start_date' => start_date, 'end_date' => end_date }.to_json
+        end
+
         
-        render json: final_price
+        render json: return_data
     end
 
     private
 
     def legal_params
-        params.permit(:name, :ages, :product_name, :trip_cost, :start_date, :end_date)
+        params.permit(:ages, :product_name, :coverage_level, :trip_cost, :start_date, :end_date)
     end
 
 end

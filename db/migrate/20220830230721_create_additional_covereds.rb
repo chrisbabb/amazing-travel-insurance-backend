@@ -4,10 +4,7 @@ class CreateAdditionalCovereds < ActiveRecord::Migration[7.0]
       t.string :first_name
       t.string :last_name
       t.string :dob
-      t.string :relationship
-      t.integer :age
       t.integer :policy_id
-
       t.timestamps
     end
   end

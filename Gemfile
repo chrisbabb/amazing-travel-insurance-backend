@@ -3,6 +3,10 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "2.7.4"
 
+gem 'active_model_serializers', '~> 0.10.2'
+
+gem 'jwt'
+
 # More Rack middleware! Used to handle CORS requests
 # https://github.com/cyu/rack-cors
 gem "rack-cors", "~> 1.1"
