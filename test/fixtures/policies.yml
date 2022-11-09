@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  policy_number: 1
+  start_date: MyString
+  end_date: MyString
+  additional_covered: one
+  product: one
+  affiliate: one
+  sub_affiliate: one
+
+two:
+  policy_number: 1
+  start_date: MyString
+  end_date: MyString
+  additional_covered: two
+  product: two
+  affiliate: two
+  sub_affiliate: two
